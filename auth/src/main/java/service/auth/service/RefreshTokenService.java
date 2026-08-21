@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import service.auth.dto.response.AuthResponse;
 import service.auth.dto.response.UsuarioResponse;
 import service.auth.entity.RefreshToken;
+import service.auth.exception.RefreshTokenExpiradoException;
+import service.auth.exception.RefreshTokenNoEncontradoException;
+import service.auth.exception.RefreshTokenRevocadoException;
 import service.auth.repository.RefreshTokenRepository;
 
 import java.time.LocalDateTime;
@@ -43,16 +46,16 @@ public class RefreshTokenService {
         RefreshToken refreshToken = refreshTokenRepository
                 .findByTokenHash(refreshTokenHash)
                 .orElseThrow(() ->
-                        new RuntimeException("Token no existente"));
+                        new RefreshTokenNoEncontradoException("Token de sesión no válido"));
 
 
 
         if(refreshToken.getRevoked()){
-            throw new RuntimeException("Token revocado");
+            throw new RefreshTokenRevocadoException("Este token ya no es válido");
         }
 
         if(refreshToken.getExpireAt().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("Token expirado");
+            throw new RefreshTokenExpiradoException("El token de sesión expiró, inicia sesión de nuevo");
         }
 
         return refreshToken;

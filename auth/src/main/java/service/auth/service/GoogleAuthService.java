@@ -5,6 +5,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.stereotype.Service;
+import service.auth.exception.InvalidTokenException;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -20,11 +21,11 @@ public class GoogleAuthService {
             GoogleIdToken idToken = verifier.verify(idTokenString);
 
             if (idToken==null){
-                throw new InvalidBearerTokenException("Token de Google invalido");
+                throw new InvalidTokenException("Token de Google invalido");
             }
             return idToken.getPayload();
         }catch (GeneralSecurityException | IOException e){
-            throw new InvalidBearerTokenException("Error verificacion token ");
+            throw new InvalidTokenException("Error verificación token ");
         }
 
     }

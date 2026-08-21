@@ -2,9 +2,11 @@ package service.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import service.auth.dto.internal.CrearUsuarioRequest;
 import service.auth.dto.response.UsuarioResponse;
+import service.auth.exception.EmailYaRegistradoException;
 
 import java.util.UUID;
 
@@ -17,12 +19,17 @@ public class UserServiceClient {
 
     public UsuarioResponse crearUsuario(CrearUsuarioRequest request){
 
+        try {
+            return restClient.post()
+                    .uri("/usuario")
+                    .body(request)
+                    .retrieve()
+                    .body(UsuarioResponse.class);
+        }catch (HttpClientErrorException e){
 
-        return restClient.post()
-                .uri("/usuario")
-                .body(request)
-                .retrieve()
-                .body(UsuarioResponse.class);
+            throw new EmailYaRegistradoException("Error al crear usuario");
+
+        }
 
     }
 

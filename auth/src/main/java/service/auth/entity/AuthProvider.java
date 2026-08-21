@@ -22,6 +22,7 @@ public class AuthProvider {
 
     @Column(name = "user_id", nullable = false)
     private UUID userId;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "proveedor")
     private Proveedor proveedor;
@@ -37,6 +38,10 @@ public class AuthProvider {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "email_verificado")
+    @Builder.Default
+    private Boolean emailVerificado=false;
 
     @PrePersist
     protected void onCreate(){

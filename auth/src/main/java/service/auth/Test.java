@@ -2,10 +2,12 @@ package service.auth;
 
 
 import io.jsonwebtoken.Claims;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import service.auth.dto.RolUsuario;
 import service.auth.dto.internal.CrearUsuarioRequest;
+import service.auth.dto.request.RegisterRequest;
 import service.auth.dto.response.UsuarioResponse;
 import service.auth.service.JwtService;
 import service.auth.service.RefreshTokenService;
@@ -63,7 +65,7 @@ public class Test {
     public UsuarioResponse test4(){
 
 
-        return userServiceClient.crearUsuario(new CrearUsuarioRequest("Juanagogo@gmail.com","Juan","https"));
+        return userServiceClient.crearUsuario(new CrearUsuarioRequest("Juan@gmail.com","Juan","https"));
     }
 
     @GetMapping("/{id}")
@@ -71,6 +73,11 @@ public class Test {
 
 
         return userServiceClient.buscarUsuarioId(id);
+    }
+
+    @PostMapping("/profil")
+    public RegisterRequest pass(@RequestBody @Valid RegisterRequest request){
+        return request;
     }
 
 }
