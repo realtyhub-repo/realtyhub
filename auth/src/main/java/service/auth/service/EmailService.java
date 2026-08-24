@@ -9,4 +9,7 @@ public class EmailService {
     private String as;
 
 
+    public EmailService(String as) {
+        this.as = as;
+    }
 }
