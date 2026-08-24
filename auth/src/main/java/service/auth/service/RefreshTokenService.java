@@ -1,10 +1,14 @@
 package service.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import service.auth.dto.response.AuthResponse;
 import service.auth.dto.response.UsuarioResponse;
 import service.auth.entity.RefreshToken;
+import service.auth.exception.RefreshTokenExpiradoException;
+import service.auth.exception.RefreshTokenNoEncontradoException;
+import service.auth.exception.RefreshTokenRevocadoException;
 import service.auth.repository.RefreshTokenRepository;
 
 import java.time.LocalDateTime;
@@ -20,6 +24,9 @@ public class RefreshTokenService {
 
     private final JwtService jwtService;
 
+    @Value("${REFRESH_EXPLAINED}")
+    private String REFRESH_EXPLAINED;
+
     public String crearRefreshToken(UUID userId){
 
         String tokenPlano = tokenGenerator.generarTokenCrudo();
@@ -28,7 +35,7 @@ public class RefreshTokenService {
         RefreshToken refreshToken = RefreshToken.builder()
                 .userId(userId)
                 .tokenHash(tokenHash)
-                .expireAt(LocalDateTime.now().plusDays(7))
+                .expireAt(LocalDateTime.now().plusDays(Integer.parseInt(REFRESH_EXPLAINED)))
                 .build();
 
         refreshTokenRepository.save(refreshToken);
@@ -43,16 +50,16 @@ public class RefreshTokenService {
         RefreshToken refreshToken = refreshTokenRepository
                 .findByTokenHash(refreshTokenHash)
                 .orElseThrow(() ->
-                        new RuntimeException("Token no existente"));
+                        new RefreshTokenNoEncontradoException("Token de sesión no válido"));
 
 
 
         if(refreshToken.getRevoked()){
-            throw new RuntimeException("Token revocado");
+            throw new RefreshTokenRevocadoException("Este token ya no es válido");
         }
 
         if(refreshToken.getExpireAt().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("Token expirado");
+            throw new RefreshTokenExpiradoException("El token de sesión expiró, inicia sesión de nuevo");
         }
 
         return refreshToken;

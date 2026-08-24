@@ -1,4 +1,4 @@
-package service.auth.dto;
+package service.auth.enums;
 
 public enum RolUsuario {
     ADMIN,

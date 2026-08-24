@@ -3,8 +3,9 @@ package service.auth.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import service.auth.dto.RolUsuario;
+import service.auth.enums.RolUsuario;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -19,7 +20,8 @@ public class JwtService {
     private final PrivateKey privateKey;
     private final PublicKey publicKey;
 
-    private static final long ACCESS_TOKEN_EXPIRATION = 100*60*15;
+    @Value("${JWT_EXPIRATION}")
+    private String ACCESS_TOKEN_EXPIRATION ;
 
     public String generarAccessToken(UUID userId, RolUsuario rol){
 
@@ -29,7 +31,7 @@ public class JwtService {
                 .subject(userId.toString())
                 .claim("rol",rol.name())
                 .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plusMillis(ACCESS_TOKEN_EXPIRATION)))
+                .expiration(Date.from(now.plusMillis(Long.parseLong(ACCESS_TOKEN_EXPIRATION))))
                 .signWith(privateKey, Jwts.SIG.RS256)
                 .compact();
 

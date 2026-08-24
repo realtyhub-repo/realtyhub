@@ -5,9 +5,22 @@ spring:
     name: auth
 
   datasource:
-    username: postgres
-    password: root
-    url: jdbc:postgresql://localhost:5432/auth_service
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_URL}
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    default-encoding: UTF-8
+    properties:
+      "[mail.smtp.auth]": true
+      "[mail.smtp.starttls.enable]": true
+      "[mail.smtp.connectiontimeout]": 5000
+      "[mail.smtp.timeout]": 3000
+      "[mail.smtp.writetimeout]": 5000
 
   jpa:
 
@@ -20,3 +33,4 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 server:
   port: 8081
+

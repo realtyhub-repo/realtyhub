@@ -1,6 +1,6 @@
 package service.auth.dto.internal;
 
-import service.auth.dto.RolUsuario;
+import service.auth.enums.RolUsuario;
 
 import java.util.UUID;
 
