@@ -5,7 +5,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import service.auth.dto.Proveedor;
+import service.auth.enums.Proveedor;
 import service.auth.dto.internal.CrearUsuarioRequest;
 import service.auth.dto.internal.Usuario;
 import service.auth.dto.request.RegisterRequest;

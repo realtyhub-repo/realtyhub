@@ -1,6 +1,7 @@
 package service.auth.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import service.auth.dto.response.AuthResponse;
 import service.auth.dto.response.UsuarioResponse;
@@ -23,6 +24,9 @@ public class RefreshTokenService {
 
     private final JwtService jwtService;
 
+    @Value("${REFRESH_EXPLAINED}")
+    private String REFRESH_EXPLAINED;
+
     public String crearRefreshToken(UUID userId){
 
         String tokenPlano = tokenGenerator.generarTokenCrudo();
@@ -31,7 +35,7 @@ public class RefreshTokenService {
         RefreshToken refreshToken = RefreshToken.builder()
                 .userId(userId)
                 .tokenHash(tokenHash)
-                .expireAt(LocalDateTime.now().plusDays(7))
+                .expireAt(LocalDateTime.now().plusDays(Integer.parseInt(REFRESH_EXPLAINED)))
                 .build();
 
         refreshTokenRepository.save(refreshToken);

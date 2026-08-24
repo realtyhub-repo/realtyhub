@@ -5,7 +5,7 @@ import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import service.auth.dto.RolUsuario;
+import service.auth.enums.RolUsuario;
 import service.auth.dto.internal.CrearUsuarioRequest;
 import service.auth.dto.request.RegisterRequest;
 import service.auth.dto.response.UsuarioResponse;
@@ -79,6 +79,7 @@ public class Test {
     public RegisterRequest pass(@RequestBody @Valid RegisterRequest request){
         return request;
     }
+
 
 }
 

@@ -2,7 +2,7 @@ package service.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import service.auth.dto.Proveedor;
+import service.auth.enums.Proveedor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
