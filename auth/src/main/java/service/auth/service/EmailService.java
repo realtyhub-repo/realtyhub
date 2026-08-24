@@ -4,4 +4,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
+
+
+    private String as;
+
+
 }
