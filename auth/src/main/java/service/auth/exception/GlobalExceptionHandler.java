@@ -49,6 +49,28 @@ public class GlobalExceptionHandler {
         return construirRespuesta(HttpStatus.FORBIDDEN, ex.getMessage());
     }
 
+    @ExceptionHandler(TokenVerificacionNoEncontradoException.class)
+    public ResponseEntity<ErrorResponse> handleTokenVerificacionNoEncontrado(TokenVerificacionNoEncontradoException ex){
+        return construirRespuesta(HttpStatus.BAD_REQUEST,ex.getMessage());
+    }
+
+    @ExceptionHandler(TokenVerificacionExpiradoException.class)
+    public ResponseEntity<ErrorResponse> handleTokenVerificacionExpiradoException(TokenVerificacionExpiradoException ex){
+        return construirRespuesta(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+
+    @ExceptionHandler(UsuarioNoEncontradoException.class)
+    public ResponseEntity<ErrorResponse> handleUsuarioNoEncontradoException(UsuarioNoEncontradoException ex){
+        return construirRespuesta(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(TokenVerificacionYaUsadoException.class)
+    public ResponseEntity<ErrorResponse> handleTokenVerificacionYaUsadoException(TokenVerificacionYaUsadoException ex){
+        return construirRespuesta(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationErros(MethodArgumentNotValidException ex){
         String mensaje = ex.getBindingResult().getFieldErrors().stream()

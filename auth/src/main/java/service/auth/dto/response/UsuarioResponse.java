@@ -1,6 +1,6 @@
 package service.auth.dto.response;
 
-import service.auth.enums.RolUsuario;
+import service.auth.entity.RolUsuario;
 
 import java.util.UUID;
 

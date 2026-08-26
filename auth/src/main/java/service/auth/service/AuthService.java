@@ -5,7 +5,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import service.auth.enums.Proveedor;
+import service.auth.dto.request.LoginRequest;
+import service.auth.entity.Proveedor;
 import service.auth.dto.internal.CrearUsuarioRequest;
 import service.auth.dto.internal.Usuario;
 import service.auth.dto.request.RegisterRequest;
@@ -29,15 +30,15 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-
+    private final EmailVerificationService verificationService;
 
     public AuthResponse loginConGoogle(String idToken){
         Usuario usuario = procesarLoginGoogle(idToken);
         return generarTokensPara(usuario);
     }
 
-    public AuthResponse loginLocal(String email, String passwordPlano){
-        Usuario usuario = procesarLoginLocal(email, passwordPlano);
+    public AuthResponse loginLocal(LoginRequest request){
+        Usuario usuario = procesarLoginLocal(request);
 
 
         return generarTokensPara(usuario);
@@ -48,7 +49,7 @@ public class AuthService {
     * vez este terminado, aún no envía correo de
     * verificación de email
     * */
-    private AuthResponse registrar(RegisterRequest request){
+    public void registrar(RegisterRequest request){
 
         Optional<AuthProvider> porEmail = authProviderRepository.findByEmail(request.email());
 
@@ -72,12 +73,7 @@ public class AuthService {
                 .build();
 
         authProviderRepository.save(authProvider);
-
-
-        return generarTokensPara
-                (new Usuario(usuarioResponse.id(),
-                        usuarioResponse.rolUsuario())
-                );
+        verificationService.enviarVerificacion(request.email(),usuarioResponse.id());
 
     }
 
@@ -87,9 +83,9 @@ public class AuthService {
     *  ser usadas en instancias de dicha clase
     * */
 
-    private Usuario procesarLoginLocal(String email, String passwordPlano){
+    private Usuario procesarLoginLocal(LoginRequest request){
 
-        AuthProvider authProvider = authProviderRepository.findByEmail(email)
+        AuthProvider authProvider = authProviderRepository.findByEmail(request.email())
 
                 .orElseThrow(()->new CredencialesInvalidasException("Email o contraseña incorrectos"));
 
@@ -103,7 +99,7 @@ public class AuthService {
         }
 
 
-        if(!passwordEncoder.matches(passwordPlano, authProvider.getPasswordHash())){
+        if(!passwordEncoder.matches(request.password(), authProvider.getPasswordHash())){
             //Esta excepción debe ser personalizada
             throw new CredencialesInvalidasException("Este email o contraseña incorrecta");
 

@@ -1,5 +1,6 @@
 
 
+
 spring:
   application:
     name: auth
@@ -31,6 +32,13 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
 server:
   port: 8081
 
