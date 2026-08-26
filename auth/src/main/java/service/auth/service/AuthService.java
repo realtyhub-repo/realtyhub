@@ -2,7 +2,9 @@ package service.auth.service;
 
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import service.auth.dto.request.LoginRequest;
@@ -24,6 +26,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
 
+    @Value("${COOKIE_EXPLAIN}")
+    private Integer COOKIE_EXPLAIN;
+
     private final AuthProviderRepository authProviderRepository;
     private final GoogleAuthService googleAuthService;
     private final UserServiceClient userServiceClient;
@@ -42,6 +47,15 @@ public class AuthService {
 
 
         return generarTokensPara(usuario);
+    }
+
+    public Cookie crearCookie(String name, String value){
+        Cookie cookie = new Cookie(name, value);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // debo cambiar este valor porque permite llamadas en HTTP
+        cookie.setPath("/");
+        cookie.setMaxAge(COOKIE_EXPLAIN);
+        return cookie;
     }
 
     /*
