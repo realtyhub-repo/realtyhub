@@ -26,7 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
 
-    @Value("${}")
+    @Value("${COOKIE_EXPLAIN}")
     private Integer COOKIE_EXPLAIN;
 
     private final AuthProviderRepository authProviderRepository;
