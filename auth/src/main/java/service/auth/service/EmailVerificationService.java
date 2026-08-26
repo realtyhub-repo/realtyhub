@@ -100,7 +100,7 @@ public class EmailVerificationService {
         if (authProvider.getEmailVerificado()){return;}
 
         Optional<VerificationToken> tokenAnterior = verificationRepository.findByUserIdAndTipoAndUsedFalse(
-                authProvider.getId(),
+                authProvider.getUserId(),
                 TipoVerificacion.EMAIL_VERIFICATION
         );
 
