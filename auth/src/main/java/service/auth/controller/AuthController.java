@@ -26,12 +26,7 @@ public class AuthController {
 
         AuthResponse authResponse = authService.loginConGoogle(googleLogin.id_token());
 
-        Cookie cookie = new Cookie("refresh_token",authResponse.refresh_token());
-
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-        cookie.setPath("/");
-        cookie.setMaxAge(604800);
+        Cookie cookie =authService.crearCookie("refresh_token", authResponse.refresh_token());
         response.addCookie(cookie);
 
         return ResponseEntity.ok().body(new AccessToken(authResponse.access_token()));
@@ -42,11 +37,7 @@ public class AuthController {
 
         AuthResponse authResponse = authService.loginLocal(request);
 
-        Cookie cookie = new Cookie("refresh_token",authResponse.refresh_token());
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-        cookie.setPath("/");
-        cookie.setMaxAge(604800);
+        Cookie cookie =authService.crearCookie("refresh_token", authResponse.refresh_token());
         response.addCookie(cookie);
 
         return ResponseEntity.ok().body(new AccessToken(authResponse.access_token()));
