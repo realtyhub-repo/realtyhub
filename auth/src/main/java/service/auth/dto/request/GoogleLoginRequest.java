@@ -1,4 +1,11 @@
 package service.auth.dto.request;
 
-public record GoogleLoginRequest(String id_token) {
+import jakarta.validation.constraints.NotBlank;
+
+public record GoogleLoginRequest(
+
+        @NotBlank
+        String id_token
+
+){
 }

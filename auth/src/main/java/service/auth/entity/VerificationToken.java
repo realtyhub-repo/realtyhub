@@ -2,7 +2,6 @@ package service.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import service.auth.enums.TipoVerificacion;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -41,7 +40,10 @@ public class VerificationToken {
     private LocalDateTime createdAt;
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        if (this.used == null) {
+            this.used = false;
+        }
     }
 }

@@ -1,4 +1,4 @@
-package service.auth.enums;
+package service.auth.entity;
 
 public enum RolUsuario {
     ADMIN,
